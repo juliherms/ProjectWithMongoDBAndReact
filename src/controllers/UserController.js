@@ -2,6 +2,14 @@ const User = require('../models/User');
 const axios = require('axios'); //responsible to call other apis
 
 module.exports = { 
+
+    //responsible to list users
+    async index(request,response){
+        const users = await User.find();
+        return response.json(users);
+    },
+
+    //responsible to save user
     async save(request, response)  {
 
     const { link,skills,latitude,longitude } = request.body;
