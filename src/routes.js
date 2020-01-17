@@ -6,7 +6,7 @@ const User = require('./models/User');
 //default access
 routes.post('/users', async (request, response) => {
 
-    const { link,skills } = request.body;
+    const { link,skills,latitude,longitude } = request.body;
 
     const apiResponse = await axios.get(`https://api.github.com/users/${link}`);
 
@@ -14,13 +14,19 @@ routes.post('/users', async (request, response) => {
 
     const skillsArray = skills.split(',').map(skill => skill.trim());
 
+    const location = {
+        type: 'Point',
+        coordinates: [longitude,latitude],
+    };
+
     //short sintax
     const ret = await User.create({
        name,
        link,
        description : bio,
        avatar_url,
-       skills: skillsArray
+       skills: skillsArray,
+       location
 
     });
 
