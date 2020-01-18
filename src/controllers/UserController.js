@@ -1,11 +1,13 @@
 const User = require('../models/User');
 const axios = require('axios'); //responsible to call other apis
+const parserStringAsArray = require('../utils/parseStringAsArray');
 
 module.exports = { 
 
     //responsible to list users
     async index(request,response){
         const users = await User.find();
+
         return response.json(users);
     },
 
@@ -17,11 +19,15 @@ module.exports = {
     //check user exists
     let user = await User.findOne({ link });
 
+    
     if(!user){
+
+        console.log('não existe');
 
         const apiResponse = await axios.get(`https://api.github.com/users/${link}`);
         const { name = login, avatar_url, bio} = apiResponse.data;
-        const skillsArray = skills.split(',').map(skill => skill.trim());
+
+        const skillsArray = parserStringAsArray(skills);
 
         const location = {
             type: 'Point',
@@ -39,5 +45,13 @@ module.exports = {
         })
     }
     return response.json(ret);
-  }   
+  },
+  //TODO
+  async update(){
+
+  },
+  //TODO
+  async destroy() {
+
+  },
 };
